@@ -10,7 +10,6 @@ class Bullet(Sprite):
 
     def __init__(self, ai_game):
         """ Initalize the Bullet class
-
         Args:
             ai_game (Class): Alien Invasion class
         """
@@ -24,4 +23,15 @@ class Bullet(Sprite):
         self.rect.midtop = ai_game.ship.rect.midtop
 
         # Store the bullet's position as a decimal value.
-        self.y_pos = float(self.rect.y_pos)
+        self.y_pos = float(self.rect.y)
+
+    def update(self):
+        """ Move the bullet up the screen."""
+        # Update the decimal position of the bullet.
+        self.y_pos -= self.settings.bullet_speed
+        #update the rect position.
+        self.rect.y = self.y_pos
+
+    def draw_bullet(self):
+        """ Draw the bullet to the screen. """
+        pygame.draw.rect(self.screen, self.color, self.rect)
