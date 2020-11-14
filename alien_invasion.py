@@ -1,17 +1,20 @@
 """Basic Game to learn on"""
 import sys
+
 import pygame
+
 from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+
 
 class AlienInvasion:
     """Overall class to manage game assets and behavior."""
 
     def __init__(self):
         """
-           Initalize the game, create game resources,and establish settings for the main surface.
+           Initialize the game, create game resources,and establish settings for the main surface.
         """
         pygame.init()
         self.settings = Settings()
@@ -34,10 +37,6 @@ class AlienInvasion:
             self._update_aliens()
             self._update_screen()
 
-            # Get rid of bullets that have disappeared.
-
-            #print(len(self.bullets))
-
     def _check_events(self):
         """Respond to keypresses and mouse events."""
         for event in pygame.event.get():
@@ -54,7 +53,7 @@ class AlienInvasion:
                 self._check_keyup_events(event)
 
     def _check_keydown_events(self, event):
-        """Repsond to keypresses.
+        """Respond to keypresses.
 
         Args:
             event (EventType): Pygame event
@@ -73,7 +72,7 @@ class AlienInvasion:
             self._fire_bullet()
 
     def _check_keyup_events(self, event):
-        """Repsond to key releases.
+        """Respond to key releases.
 
         Args:
             event (EventType): Pygame event
@@ -84,20 +83,21 @@ class AlienInvasion:
             self.ship.moving_left = False
 
     def _fire_bullet(self):
-        """ Create a new bullet and add it to the bullets group. """
+        """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
     def _update_bullets(self):
-        """Update the poisiton of bullets and get rid of old bullets."""
+        """Update position of bullets and get rid of old bullets."""
         # Update bullet positions.
         self.bullets.update()
 
-        # Get rid of bullets that have disappeard.
+        # Get rid of bullets that have disappeared.
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+
     def _update_aliens(self):
         """Update the positions of all aliens in the fleet."""
         self._check_fleet_edges()
@@ -107,7 +107,6 @@ class AlienInvasion:
         """Create the fleet of aliens."""
         # Create an alien and find the number of aliens in a row.
         # Spacing between each alien is equal to one alien width.
-
         # This alien is not used for anything other than determining space.
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
@@ -116,7 +115,8 @@ class AlienInvasion:
 
         # Determine the number of rows of alien that fit on the screen.
         ship_height = self.ship.rect.height
-        available_space_y = (self.settings.screen_height - (3 * alien_height) - ship_height)
+        available_space_y = (self.settings.screen_height -
+                            (3 * alien_height) - ship_height)
         number_rows = available_space_y // (2 * alien_height)
 
         # Create the full fleet of aliens.
@@ -140,14 +140,13 @@ class AlienInvasion:
         alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
         self.aliens.add(alien)
 
-
-
     def _check_fleet_edges(self):
-        """Respond appropriately if an aliens have reached an edge."""
+        """Respond appropriately if any aliens have reached an edge."""
         for alien in self.aliens.sprites():
             if alien.check_edges():
                 self._change_fleet_direction()
                 break
+
     def _change_fleet_direction(self):
         """Drop the entire fleet and change the fleet's direction."""
         for alien in self.aliens.sprites():
@@ -164,6 +163,7 @@ class AlienInvasion:
         self.aliens.draw(self.screen)
         #make the most recently drawn screen visible.
         pygame.display.flip()
+
 if __name__ == '__main__':
     # Make a game instance, and run the game.
     ai = AlienInvasion()
