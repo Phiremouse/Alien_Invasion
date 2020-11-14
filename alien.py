@@ -16,6 +16,7 @@ class Alien(Sprite):
         """
         super().__init__()
         self.screen = ai_game.screen
+        self.settings = ai_game.settings
 
         # Load the alien image and set its rect attribute.
         self.image = pygame.image.load('images/alien.bmp')
@@ -27,3 +28,13 @@ class Alien(Sprite):
 
         # Store the alien's exact horizontal position.
         self.x_pos = float(self.rect.x)
+
+    def update(self):
+        """Move the alien ot the left or the right."""
+        self.x_pos += (self.settings.alien_speed * self.settings.fleet_direction)
+        self.rect = self.x_pos
+
+    def check_edges(self):
+        """Return TRUE if alien is at edge of screen."""
+        screen_rect = self.screen.get_rect()
+        bool(self.rect.right >= screen_rect.left  or self.rect.left <= 0)
